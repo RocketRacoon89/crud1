@@ -1,6 +1,5 @@
 package com.Mike.crud.repository;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface GenericRepository <T, Id> {
