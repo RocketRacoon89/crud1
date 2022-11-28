@@ -18,7 +18,7 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
         List<Specialty> list = new ArrayList<>();
         String sql = "SELECT * FROM specialties";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery(sql);
             while (resultSet.next()) {
                 Specialty specialty = new Specialty();
@@ -39,7 +39,7 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
     private void writeSpecialtyToDb(Specialty specialty) {
         String sql = "INSERT INTO specialties(id, specialty, status) VALUES (?,?,?)";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setInt(1,specialty.getId());
             preparedStatement.setString(2, specialty.getSpecialty());
             preparedStatement.setString(3,specialty.getStatus().toString());
@@ -96,7 +96,7 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
     public Specialty update(Specialty specialty) {
         String sql = "UPDATE specialties SET specialty = ?, status = ? WHERE id = ?";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setString(1, specialty.getSpecialty());
             preparedStatement.setString(2, specialty.getStatus().toString());
             preparedStatement.setInt(3, specialty.getId());
@@ -111,7 +111,7 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
     public void deleteById(Integer id) {
         String sql = "DELETE FROM specialties WHERE id = ?";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setInt(1,id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

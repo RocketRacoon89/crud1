@@ -20,7 +20,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         List<Skill> skills = new ArrayList<>();
         String sql = "SELECT id_skill FROM developer_skills WHERE id_developer = ?";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, idDev);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -37,7 +37,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         List<Developer> developers = new ArrayList<>();
         String sql = "SELECT * FROM developers";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery(sql);
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -64,7 +64,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
     private void writeDeveloperToDb(Developer developer) {
         String sql = "INSERT INTO developers(id, FirstName, LastName, Status, id_specialty) VALUES (?, ?, ?, ?, ?)";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, developer.getId());
             preparedStatement.setString(2, developer.getFirstName());
             preparedStatement.setString(3, developer.getLastName());
@@ -109,7 +109,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
                 " id_specialty = ?" +
                 " WHERE id = ?";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setString(1, developer.getFirstName());
             preparedStatement.setString(2, developer.getLastName());
             preparedStatement.setString(3,developer.getStatus().toString());
@@ -127,9 +127,9 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
     public void deleteById(Integer id) {
         String sql = "DELETE FROM developers WHERE id = ?";
         try {
-            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate(sql);
+            preparedStatement.executeUpdate();
             new DbDevSkillsRepositoryImpl().deleteDevSkills(id);
         } catch (SQLException e) {
             e.printStackTrace();
