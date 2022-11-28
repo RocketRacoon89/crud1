@@ -7,6 +7,9 @@ import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.DeveloperRepository;
 import com.Mike.crud.repository.SkillRepository;
 import com.Mike.crud.repository.SpecialtyRepository;
+import com.Mike.crud.repository.database.DbDeveloperRepositoryImpl;
+import com.Mike.crud.repository.database.DbSkillRepositoryImpl;
+import com.Mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import com.Mike.crud.repository.gson.GsonDeveloperRepositoryImpl;
 import com.Mike.crud.repository.gson.GsonSkillRepositoryImpl;
 import com.Mike.crud.repository.gson.GsonSpecialtyRepositoryImpl;
@@ -16,9 +19,13 @@ import java.util.List;
 
 public class DeveloperController {
 
-    private final DeveloperRepository developerRepository = new GsonDeveloperRepositoryImpl();
-    private final SkillRepository skillRepository = new GsonSkillRepositoryImpl();
-    private final SpecialtyRepository specialtyRepository = new GsonSpecialtyRepositoryImpl();
+//    private final DeveloperRepository developerRepository = new GsonDeveloperRepositoryImpl();
+//    private final SkillRepository skillRepository = new GsonSkillRepositoryImpl();
+//    private final SpecialtyRepository specialtyRepository = new GsonSpecialtyRepositoryImpl();
+
+    private final DeveloperRepository developerRepository = new DbDeveloperRepositoryImpl();
+    private final SkillRepository skillRepository = new DbSkillRepositoryImpl();
+    private final SpecialtyRepository specialtyRepository = new DbSpecialtyRepositoryImpl();
 
     public Developer createDeveloper(String firstName, String lastName, List<Integer> skillID, Integer specialty, String status) {
         Developer developer = new Developer();

@@ -12,20 +12,20 @@ public class Program {
     static private int choice;
 
     public static void main(String[] args) {
-        String [] path = {"src//main//resources//Specialties.json",
-                "src//main//resources//Developers.json",
-                "src//main//resources//Skills.json"};
-        File file;
-        for(int i=0; i<path.length; i++) {
-            file = new File(path[i]);
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-            }
-        }
+//        String [] path = {"src//main//resources//Specialties.json",
+//                "src//main//resources//Developers.json",
+//                "src//main//resources//Skills.json"};
+//        File file;
+//        for(int i=0; i<path.length; i++) {
+//            file = new File(path[i]);
+//            if (!file.exists()) {
+//                try {
+//                    file.createNewFile();
+//                } catch (IOException e) {
+//                    System.out.println(e);
+//                }
+//            }
+//        }
         System.out.println("Enter please next move: ");
         System.out.println("Enter \"1\" for work with Developer");
         System.out.println("Enter \"2\" for work with Skill");

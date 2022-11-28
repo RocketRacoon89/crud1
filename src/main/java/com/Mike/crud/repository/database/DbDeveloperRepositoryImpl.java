@@ -5,7 +5,6 @@ import com.Mike.crud.model.Skill;
 import com.Mike.crud.model.Specialty;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.DeveloperRepository;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +21,8 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         String sql = "SELECT id_skill FROM developer_skills WHERE id_developer = ?";
         try {
             preparedStatement = DBconnect.getCon().prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            preparedStatement.setInt(1, idDev);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int idSkill = resultSet.getInt("id_skill");
                 skills.add(new DbSkillRepositoryImpl().getById(idSkill));
@@ -62,7 +62,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     private void writeDeveloperToDb(Developer developer) {
-        String sql = "INSERT INTO developers(id, FirstName, LastName, Status, id_specialty) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO developers(id, FirstName, LastName, Status, id_specialty) VALUES (?, ?, ?, ?, ?)";
         try {
             preparedStatement = DBconnect.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, developer.getId());
@@ -70,6 +70,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
             preparedStatement.setString(3, developer.getLastName());
             preparedStatement.setString(4, developer.getStatus().toString());
             preparedStatement.setInt(5, developer.getSpecialty().getId());
+            preparedStatement.executeUpdate();
             new DbDevSkillsRepositoryImpl().saveDevSkills(developer);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,11 +103,11 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
     @Override
     public Developer update(Developer developer) {
         String sql = "UPDATE developers" +
-                "SET FirstName = ?," +
-                "LastName = ?," +
-                "Status = ?," +
-                "id_specialty = ?" +
-                "WHERE id = ?";
+                " SET FirstName = ?," +
+                " LastName = ?," +
+                " Status = ?," +
+                " id_specialty = ?" +
+                " WHERE id = ?";
         try {
             preparedStatement = DBconnect.getCon().prepareStatement(sql);
             preparedStatement.setString(1, developer.getFirstName());
@@ -114,7 +115,8 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
             preparedStatement.setString(3,developer.getStatus().toString());
             preparedStatement.setInt(4,developer.getSpecialty().getId());
             preparedStatement.setInt(5,developer.getId());
-            System.out.println("Developer update "+preparedStatement.executeUpdate(sql));
+            new DbDevSkillsRepositoryImpl().updateDevSkills(developer);
+            System.out.println("Developer update "+preparedStatement.executeUpdate());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,6 +130,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
             preparedStatement = DBconnect.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate(sql);
+            new DbDevSkillsRepositoryImpl().deleteDevSkills(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

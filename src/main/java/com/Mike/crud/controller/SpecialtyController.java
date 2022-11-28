@@ -3,13 +3,15 @@ package com.Mike.crud.controller;
 import com.Mike.crud.model.Specialty;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.SpecialtyRepository;
+import com.Mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import com.Mike.crud.repository.gson.GsonSpecialtyRepositoryImpl;
 
 import java.util.List;
 
 public class SpecialtyController {
 
-    private SpecialtyRepository specialtyRepository = new GsonSpecialtyRepositoryImpl();
+//    private SpecialtyRepository specialtyRepository = new GsonSpecialtyRepositoryImpl();
+    private SpecialtyRepository specialtyRepository = new DbSpecialtyRepositoryImpl();
 
     public Specialty createSpecialty(String name, String status) {
         Specialty specialty = new Specialty();

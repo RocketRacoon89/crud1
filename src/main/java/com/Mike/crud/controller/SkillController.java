@@ -3,12 +3,14 @@ package com.Mike.crud.controller;
 import com.Mike.crud.model.Skill;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.SkillRepository;
+import com.Mike.crud.repository.database.DbSkillRepositoryImpl;
 import com.Mike.crud.repository.gson.GsonSkillRepositoryImpl;
 
 import java.util.List;
 
 public class SkillController {
-    private final SkillRepository skillRepository = new GsonSkillRepositoryImpl();
+//    private final SkillRepository skillRepository = new GsonSkillRepositoryImpl();
+private final SkillRepository skillRepository = new DbSkillRepositoryImpl();
 
     public Skill createSkill(String name, String status) {
         Skill skill = new Skill();

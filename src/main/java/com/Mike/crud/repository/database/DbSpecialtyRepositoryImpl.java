@@ -58,6 +58,25 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
     @Override
     public Specialty getById(Integer id) {
         return getAllSpecialtyInternal().stream().filter(s -> s.getId().equals(id)).findFirst().orElse(null);
+//        String sql = "SELECT * FROM specialties WHERE id = ?";
+//        Specialty retSpecialty = new Specialty();
+//        try {
+//            preparedStatement = DBconnect.getCon().prepareStatement(sql);
+//            preparedStatement.setInt(1,id);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                int idSpec = resultSet.getInt("id");
+//                String spec = resultSet.getNString("specialty");
+//                String status = resultSet.getNString("status");
+//                retSpecialty.setId(idSpec);
+//                System.out.println(idSpec+" ID");
+//                retSpecialty.setSpecialty(spec);
+//                retSpecialty.setStatus(Status.valueOf(status));
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return retSpecialty;
     }
 
     @Override
@@ -75,7 +94,7 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public Specialty update(Specialty specialty) {
-        String sql = "UPDATE specialties SET skill = ?, status = ? WHERE id = ?";
+        String sql = "UPDATE specialties SET specialty = ?, status = ? WHERE id = ?";
         try {
             preparedStatement = DBconnect.getCon().prepareStatement(sql);
             preparedStatement.setString(1, specialty.getSpecialty());
