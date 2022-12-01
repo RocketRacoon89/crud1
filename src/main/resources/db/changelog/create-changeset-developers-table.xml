@@ -1,0 +1,28 @@
+‹?xml version="1.0" encoding="UTF-8"?>
+        ‹databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+        ‹changeSet id="create_table_developers" author="Mike">
+        ‹!-- Прописываем создание таблицы genre-->
+        ‹createTable tableName="developers">
+        ‹!--Создаем поля -->
+        ‹column autoIncrement="false" name="id" type="int">
+        ‹constraints primaryKey="true" nullable="false"/>
+        ‹/column>
+        ‹column name="FirstName" type="varchar(45)">
+        ‹constraints nullable="true" unique="false"/>
+        ‹/column>
+        ‹column name="LastName" type="varchar(45)">
+        ‹constraints nullable="true" unique="false"/>
+        ‹/column>
+        ‹column name="Status" type="varchar(45)">
+        ‹constraints nullable="true" unique="false"/>
+        ‹/column>
+        ‹column name="id_specialty" type="varchar(45)">
+        ‹constraints nullable="true" unique="false"/>
+        ‹/column>
+        ‹/createTable>
+        ‹/changeSet>
+        ‹/databaseChangeLog>
