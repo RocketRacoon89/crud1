@@ -1,9 +1,10 @@
 package com.Mike.crud.repository.database;
 
 import com.Mike.crud.model.Skill;
-import com.Mike.crud.model.Specialty;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.SkillRepository;
+import com.Mike.crud.utils.JdbcUtils;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,7 +19,7 @@ public class DbSkillRepositoryImpl implements SkillRepository {
         List<Skill> list = new ArrayList<>();
         String sql = "SELECT * FROM skills";
         try {
-            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
+            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery(sql);
             while (resultSet.next()) {
                 Skill skill = new Skill();
@@ -45,7 +46,7 @@ public class DbSkillRepositoryImpl implements SkillRepository {
     private void writeSkillsToDb(Skill skill) {
         String sql = "INSERT INTO skills(id, skill, status) VALUES (?,?,?)";
         try {
-            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
+            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, skill.getId());
             preparedStatement.setString(2,skill.getSkill());
             preparedStatement.setString(3,skill.getStatus().toString());
@@ -78,7 +79,7 @@ public class DbSkillRepositoryImpl implements SkillRepository {
     public Skill update(Skill skill) {
         String sql = "UPDATE skills SET skill = ?, status = ? WHERE id = ?";
         try {
-            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
+            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
             preparedStatement.setString(1, skill.getSkill());
             preparedStatement.setString(2, skill.getStatus().toString());
             preparedStatement.setInt(3, skill.getId());
@@ -94,7 +95,7 @@ public class DbSkillRepositoryImpl implements SkillRepository {
     public void deleteById(Integer id) {
         String sql = "DELETE FROM skills WHERE id = ?";
         try {
-            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
+            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
             preparedStatement.setInt(1,id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

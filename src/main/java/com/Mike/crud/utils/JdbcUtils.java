@@ -1,19 +1,18 @@
-package com.Mike.crud.repository.database;
+package com.Mike.crud.utils;
 
-import com.mysql.jdbc.Driver;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBconnect2 {
+public class JdbcUtils {
     private static Connection connection = null;
-    private static DBconnect2 dBconnect;
+    private static JdbcUtils dBconnect;
 
     private static String url = "jdbc:mysql://localhost:3306/test_schema";
     private static String userName = "Mike";
     private static String pwd = "5436";
 
-    private DBconnect2() {
+    private JdbcUtils() {
     }
 
     public static synchronized Connection getCon() throws SQLException {

@@ -1,14 +1,11 @@
 package com.Mike.crud.repository.database;
 
 import com.Mike.crud.model.Developer;
-import com.Mike.crud.model.Skill;
+import com.Mike.crud.utils.JdbcUtils;
 
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DbDevSkillsRepositoryImpl {
 
@@ -17,7 +14,7 @@ public class DbDevSkillsRepositoryImpl {
     public void saveDevSkills(Developer developer) {
         String sql = "INSERT INTO developer_skills(id_developer, id_skill) VALUES(?, ?)";
         try {
-            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
+            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, developer.getId());
             for(int i=0; i<developer.getSkills().size();i++){
                 preparedStatement.setInt(2,developer.getSkills().get(i).getId());
@@ -38,7 +35,7 @@ public class DbDevSkillsRepositoryImpl {
     public void deleteDevSkills(Integer idDev) {
         String sql = "DELETE FROM developer_skills WHERE id_developer = ?";
         try {
-            preparedStatement = DBconnect2.getCon().prepareStatement(sql);
+            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
             preparedStatement.setInt(1, idDev);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
