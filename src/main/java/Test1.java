@@ -8,8 +8,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Test1 {
-    public static void main(String[] args) throws SQLException {
-        DbSkillRepositoryImpl dbSkillRepository = new DbSkillRepositoryImpl();
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+//        DbSkillRepositoryImpl dbSkillRepository = new DbSkillRepositoryImpl();
 //        dbSkillRepository.deleteById(2);
 
 //        Skill newSkill = new Skill();
@@ -34,9 +34,7 @@ public class Test1 {
 //        dev.setStatus(Status.ACTIVE);
 //        new DbDevSkillsRepositoryImpl().saveDevSkills(dev);
 
-        DbSpecialtyRepositoryImpl dbSpecialtyRepository = new DbSpecialtyRepositoryImpl();
-
-        System.out.println(dbSpecialtyRepository.getById(1));
+        Class.forName("com.mysql.cj.jdbc.Driver");
 //
 //        System.out.println(dbSkillRepository.getById(1));
 
