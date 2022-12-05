@@ -11,6 +11,7 @@
     <properties>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -32,7 +33,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>3.0.7</version>
+            <version>4.17.2</version>
         </dependency>
 
     </dependencies>
@@ -48,6 +49,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <propertyFile>src/main/resources/db/changelog/liquibase.properties</propertyFile>
+                            <changeLogFile>src/main/resources/db/changelog/changeLogFile.xml</changeLogFile>
                         </configuration>
                         <goals>
                             <goal>update</goal>
@@ -57,7 +59,19 @@
             </plugin>
         </plugins>
     </build>
-
-
-
+    <profiles>
+        <profile>
+            <id>db1</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <liquibase.url>jdbc:mysql://localhost:3306/dev_schema</liquibase.url>
+                <liquibase.driver>com.mysql.jdbc.Driver</liquibase.driver>
+                <liquibase.username>Mike</liquibase.username>
+                <liquibase.password>5436</liquibase.password>
+                <liquibase.changeLogFile>src/main/resources/db/changelog/changeLogFile.xml</liquibase.changeLogFile>
+            </properties>
+        </profile>
+    </profiles>
 </project>
