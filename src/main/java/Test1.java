@@ -3,9 +3,11 @@ import com.Mike.crud.model.Skill;
 import com.Mike.crud.model.Specialty;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.database.*;
+import com.Mike.crud.utils.JdbcUtils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Test1 {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -33,10 +35,52 @@ public class Test1 {
 //        dev.setSkills(dbSkillRepository.getAll());
 //        dev.setStatus(Status.ACTIVE);
 //        new DbDevSkillsRepositoryImpl().saveDevSkills(dev);
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
+//        PreparedStatement preparedStatement;
+//        String sql = "insert into specialties(id, specialty, status) values(?, ?, ?);";
+//        preparedStatement = JdbcUtils.getPreparedStatement(sql);
+//        preparedStatement.setInt(1, 61);
+//        preparedStatement.setString(2,"test3");
+//        preparedStatement.setString(3, "test4");
+//        preparedStatement.executeUpdate();
 //
-//        System.out.println(dbSkillRepository.getById(1));
+//
+////
+////        System.out.println(dbSkillRepository.getById(1));
+//        String sql1 = "select * from specialties;";
+//        ResultSet resultSet = JdbcUtils.getPreparedStatement(sql1).executeQuery();
+//        while (resultSet.next()) {
+//            int id = resultSet.getInt("id");
+//            String spec = resultSet.getNString("specialty");
+//            String status = resultSet.getNString("status");
+//            System.out.println(id+", "+spec+", "+status);
+//        }
+
+//        List<String> list = new ArrayList<>();
+//        list.add("yyyyyyy");
+//        list.add("ssadsah");
+//        list.add("ommkdf");
+//        list.add("pdsgnf");
+//        list.add("nsdflds");
+//        list.add("[[[op]]]");
+//        list.add("jnkfs");
+//        list.add("dfsgkff");
+//        list.add("foiml");
+//
+//        String sql = "INSERT INTO specialties(id, specialty) VALUES(?, ?);";
+//        PreparedStatement preparedStatement;
+//        preparedStatement = JdbcUtils.getPreparedStatement(sql);
+//        int x = 1;
+//        for(String s : list) {
+//            x = x+3;
+//            preparedStatement.setInt(1,x);
+//            preparedStatement.setString(2,s);
+//            preparedStatement.executeUpdate();
+//        }
+
+
+DbDeveloperRepositoryImpl dbDeveloperRepository = new DbDeveloperRepositoryImpl();
+//        System.out.println(dbDeveloperRepository.getAll());
+       System.out.println(dbDeveloperRepository.getById(6));
 
 
     }

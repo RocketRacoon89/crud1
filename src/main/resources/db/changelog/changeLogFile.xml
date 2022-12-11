@@ -6,4 +6,6 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
         <include file="src/main/resources/db/changelog/create-developers-table.xml"/>
         <include file="src/main/resources/db/changelog/create-specialties-table.xml"/>
+        <include file="src/main/resources/db/changelog/create-developer_skills-table.xml"/>
+        <include file="src/main/resources/db/changelog/create-skills-table.xml"/>
 </databaseChangeLog>

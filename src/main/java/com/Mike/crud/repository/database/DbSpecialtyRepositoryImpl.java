@@ -4,19 +4,41 @@ import com.Mike.crud.model.Specialty;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.SpecialtyRepository;
 import com.Mike.crud.utils.JdbcUtils;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
-    PreparedStatement preparedStatement;
+    @Override
+    public Specialty getById(Integer id) {
+        PreparedStatement preparedStatement;
+        String sql = "SELECT * FROM specialties WHERE id = ?";
+        Specialty retSpecialty = new Specialty();
+        try {
+            preparedStatement = JdbcUtils.getPreparedStatement(sql);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int idSpec = resultSet.getInt("id");
+                String spec = resultSet.getNString("specialty");
+                String status = resultSet.getNString("status");
+                retSpecialty.setId(idSpec);
+                System.out.println(idSpec+" ID");
+                retSpecialty.setSpecialty(spec);
+                retSpecialty.setStatus(Status.valueOf(status));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return retSpecialty;
+    }
 
-    private List<Specialty> getAllSpecialtyInternal() {
+    @Override
+    public List<Specialty> getAll() {
+        PreparedStatement preparedStatement;
         List<Specialty> list = new ArrayList<>();
         String sql = "SELECT * FROM specialties";
         try {
@@ -38,64 +60,27 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
         return list;
     }
 
-    private void writeSpecialtyToDb(Specialty specialty) {
-        String sql = "INSERT INTO specialties(id, specialty, status) VALUES (?,?,?)";
+    @Override
+    public Specialty save(Specialty specialty) {
+        PreparedStatement preparedStatement;
+        String sql = "INSERT INTO specialties(specialty, status) VALUES(?, ?);";
+
         try {
-            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
-            preparedStatement.setInt(1,specialty.getId());
-            preparedStatement.setString(2, specialty.getSpecialty());
-            preparedStatement.setString(3,specialty.getStatus().toString());
-            System.out.println("Insert row: "+preparedStatement.executeUpdate());
+            preparedStatement = JdbcUtils.getPreparedStatement(sql);
+            preparedStatement.setString(1, specialty.getSpecialty());
+            preparedStatement.setString(2, specialty.getStatus().toString());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
 
-    private Integer generateId(List<Specialty> specialties) {
-        if(specialties.size()==0) {return 1;}
-        Specialty specialtyWithMaxId = specialties.stream().max(Comparator.comparing(Specialty::getId)).get();
-        return specialtyWithMaxId.getId() +1;
-    }
-
-    @Override
-    public Specialty getById(Integer id) {
-        return getAllSpecialtyInternal().stream().filter(s -> s.getId().equals(id)).findFirst().orElse(null);
-//        String sql = "SELECT * FROM specialties WHERE id = ?";
-//        Specialty retSpecialty = new Specialty();
-//        try {
-//            preparedStatement = DBconnect.getCon().prepareStatement(sql);
-//            preparedStatement.setInt(1,id);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            while (resultSet.next()) {
-//                int idSpec = resultSet.getInt("id");
-//                String spec = resultSet.getNString("specialty");
-//                String status = resultSet.getNString("status");
-//                retSpecialty.setId(idSpec);
-//                System.out.println(idSpec+" ID");
-//                retSpecialty.setSpecialty(spec);
-//                retSpecialty.setStatus(Status.valueOf(status));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return retSpecialty;
-    }
-
-    @Override
-    public List<Specialty> getAll() {
-        return getAllSpecialtyInternal();
-    }
-
-    @Override
-    public Specialty save(Specialty specialty) {
-//        List<Specialty> list = getAllSpecialtyInternal();
-        specialty.setId(generateId(getAllSpecialtyInternal()));
-        writeSpecialtyToDb(specialty);
         return specialty;
+
     }
 
     @Override
     public Specialty update(Specialty specialty) {
+        PreparedStatement preparedStatement;
         String sql = "UPDATE specialties SET specialty = ?, status = ? WHERE id = ?";
         try {
             preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
@@ -111,6 +96,7 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement preparedStatement;
         String sql = "DELETE FROM specialties WHERE id = ?";
         try {
             preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
