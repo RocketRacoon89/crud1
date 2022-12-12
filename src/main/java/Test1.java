@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Test1 {
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args)  {
+//        throws SQLException, ClassNotFoundException
 //        DbSkillRepositoryImpl dbSkillRepository = new DbSkillRepositoryImpl();
 //        dbSkillRepository.deleteById(2);
 
@@ -78,9 +79,20 @@ public class Test1 {
 //        }
 
 
-DbDeveloperRepositoryImpl dbDeveloperRepository = new DbDeveloperRepositoryImpl();
+//DbDeveloperRepositoryImpl dbDeveloperRepository = new DbDeveloperRepositoryImpl();
 //        System.out.println(dbDeveloperRepository.getAll());
-       System.out.println(dbDeveloperRepository.getById(6));
+//       System.out.println(dbDeveloperRepository.getById(6));
+
+        String sql = "SELECT * FROM skills;";
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery(sql);) {
+//            preparedStatement.setInt(1,2);
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt(1)+" "+resultSet.getString(2)+" "+resultSet.getString(3));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
     }

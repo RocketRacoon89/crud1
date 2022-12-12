@@ -14,11 +14,11 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public Specialty getById(Integer id) {
-        PreparedStatement preparedStatement;
         String sql = "SELECT * FROM specialties WHERE id = ?";
         Specialty retSpecialty = new Specialty();
-        try {
-            preparedStatement = JdbcUtils.getPreparedStatement(sql);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);) {
+
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -38,11 +38,11 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public List<Specialty> getAll() {
-        PreparedStatement preparedStatement;
         List<Specialty> list = new ArrayList<>();
         String sql = "SELECT * FROM specialties";
-        try {
-            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getCon().prepareStatement(sql);) {
+
             ResultSet resultSet = preparedStatement.executeQuery(sql);
             while (resultSet.next()) {
                 Specialty specialty = new Specialty();
@@ -62,11 +62,10 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public Specialty save(Specialty specialty) {
-        PreparedStatement preparedStatement;
         String sql = "INSERT INTO specialties(specialty, status) VALUES(?, ?);";
 
-        try {
-            preparedStatement = JdbcUtils.getPreparedStatement(sql);
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);) {
+
             preparedStatement.setString(1, specialty.getSpecialty());
             preparedStatement.setString(2, specialty.getStatus().toString());
             preparedStatement.executeUpdate();
@@ -80,10 +79,9 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public Specialty update(Specialty specialty) {
-        PreparedStatement preparedStatement;
         String sql = "UPDATE specialties SET specialty = ?, status = ? WHERE id = ?";
-        try {
-            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
+        try (PreparedStatement preparedStatement = JdbcUtils.getCon().prepareStatement(sql);) {
+
             preparedStatement.setString(1, specialty.getSpecialty());
             preparedStatement.setString(2, specialty.getStatus().toString());
             preparedStatement.setInt(3, specialty.getId());
@@ -96,10 +94,10 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
 
     @Override
     public void deleteById(Integer id) {
-        PreparedStatement preparedStatement;
         String sql = "DELETE FROM specialties WHERE id = ?";
-        try {
-            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getCon().prepareStatement(sql);) {
+
             preparedStatement.setInt(1,id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

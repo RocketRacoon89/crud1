@@ -12,11 +12,11 @@ public class DbSkillRepositoryImpl implements SkillRepository {
 
         @Override
     public Skill getById(Integer id) {
-            PreparedStatement preparedStatement;
             String sql = "SELECT * FROM skills WHERE id = ?";
             Skill skill = new Skill();
-            try {
-                preparedStatement = JdbcUtils.getPreparedStatement(sql);
+
+            try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);) {
+
                 preparedStatement.setInt(1,id);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
@@ -36,11 +36,12 @@ public class DbSkillRepositoryImpl implements SkillRepository {
 
         @Override
     public List<Skill> getAll()  {
-            PreparedStatement preparedStatement;
+
             List<Skill> list = new ArrayList<>();
             String sql = "SELECT * FROM skills";
-            try {
-                preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
+
+            try (PreparedStatement preparedStatement = JdbcUtils.getCon().prepareStatement(sql);) {
+
                 ResultSet resultSet = preparedStatement.executeQuery(sql);
                 while (resultSet.next()) {
                     Skill skill = new Skill();
@@ -60,11 +61,10 @@ public class DbSkillRepositoryImpl implements SkillRepository {
 
         @Override
     public Skill save(Skill skill)  {
-            PreparedStatement preparedStatement;
             String sql = "INSERT INTO skills(skill, status) VALUES(?, ?);";
 
-            try {
-                preparedStatement = JdbcUtils.getPreparedStatement(sql);
+            try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);) {
+
                 preparedStatement.setString(1, skill.getSkill());
                 preparedStatement.setString(2, skill.getStatus().toString());
                 preparedStatement.executeUpdate();
@@ -76,10 +76,10 @@ public class DbSkillRepositoryImpl implements SkillRepository {
 
         @Override
     public Skill update(Skill skill) {
-            PreparedStatement preparedStatement;
         String sql = "UPDATE skills SET skill = ?, status = ? WHERE id = ?";
-        try {
-            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getCon().prepareStatement(sql);) {
+
             preparedStatement.setString(1, skill.getSkill());
             preparedStatement.setString(2, skill.getStatus().toString());
             preparedStatement.setInt(3, skill.getId());
@@ -92,10 +92,10 @@ public class DbSkillRepositoryImpl implements SkillRepository {
 
     @Override
     public void deleteById(Integer id) {
-            PreparedStatement preparedStatement;
         String sql = "DELETE FROM skills WHERE id = ?";
-        try {
-            preparedStatement = JdbcUtils.getCon().prepareStatement(sql);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getCon().prepareStatement(sql);) {
+
             preparedStatement.setInt(1,id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

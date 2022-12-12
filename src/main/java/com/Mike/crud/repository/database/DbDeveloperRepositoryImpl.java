@@ -2,11 +2,9 @@ package com.Mike.crud.repository.database;
 
 import com.Mike.crud.model.Developer;
 import com.Mike.crud.model.Skill;
-import com.Mike.crud.model.Specialty;
 import com.Mike.crud.model.Status;
 import com.Mike.crud.repository.DeveloperRepository;
 import com.Mike.crud.utils.JdbcUtils;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,13 +33,14 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         int i = 0;
         //TODO: use 1 request with JOIN
         String sql = "SELECT * FROM developers;";
-        try {
-            PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);
+        String sqlDs = "SELECT * FROM developer_skills WHERE id_developer = ?;";
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery(sql);
+            PreparedStatement preparedStatementEn = JdbcUtils.getPreparedStatement(sqlDs);) {
+
             while (resultSet.next()) {
                 Developer developer = mapResultSetToDeveloper(resultSet);
-                sql = "SELECT * FROM developer_skills WHERE id_developer = ?;";
-                PreparedStatement preparedStatementEn = JdbcUtils.getPreparedStatement(sql);
                 preparedStatementEn.setInt(1, developer.getId());
                 ResultSet resultSet1 = preparedStatementEn.executeQuery();
                 List<Skill> skills = new ArrayList<>();
@@ -65,8 +64,10 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         List<Skill> devSkills = new ArrayList<>();
         String sqlDev = "SELECT * FROM developers WHERE id = ?;";
         String sqlSkills = "SELECT id_skill FROM developer_skills WHERE id_developer = ?;";
-        try {
-            PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sqlDev);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sqlDev);
+             PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sqlSkills);) {
+
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -78,9 +79,8 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
                 developer.setStatus(Status.valueOf(resultSet.getNString("status")));
 
                 //TODO: get skill for developer
-                preparedStatement = JdbcUtils.getPreparedStatement(sqlSkills);
-                preparedStatement.setInt(1,developer.getId());
-                ResultSet resultSet1 = preparedStatement.executeQuery();
+                preparedStatement1.setInt(1,developer.getId());
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
                 while (resultSet1.next()) {
                     devSkills.add(new DbSkillRepositoryImpl().getById(resultSet1.getInt("id_skill")));
                 }
@@ -95,13 +95,14 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
 
     @Override
     public Developer save(Developer developer) {
-        PreparedStatement preparedStatement;
         String sql_dev = "INSERT INTO developers(firstname, lastname, status, id_specialty) VALUES(?, ?, ?, ?);";
         String sql_spec = "INSERT INTO developer_skills(id_developer, id_skill) VALUES(?, ?);";
         String sql_getId = "SELECT id FROM developers WHERE firstname = ? and lastname = ? and id_specialty = ?;";
 
-        try {
-            preparedStatement = JdbcUtils.getPreparedStatement(sql_dev);
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql_dev);
+             PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sql_getId);
+             PreparedStatement preparedStatement2 = JdbcUtils.getPreparedStatement(sql_spec);) {
+
             preparedStatement.setString(1, developer.getFirstName());
             preparedStatement.setString(2, developer.getLastName());
             preparedStatement.setString(3, developer.getStatus().toString());
@@ -109,7 +110,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
             if(preparedStatement.executeUpdate()==1) {
 
                 //TODO: get developer_id for new developer
-                PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sql_getId);
+
                 preparedStatement1.setString(1, developer.getFirstName());
                 preparedStatement1.setString(2, developer.getLastName());
                 preparedStatement1.setInt(3, developer.getSpecialty().getId());
@@ -119,11 +120,10 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
                     System.out.println("save return id "+ developer.getId());
                 }
 
-                preparedStatement = JdbcUtils.getPreparedStatement(sql_spec);
-                preparedStatement.setInt(1, developer.getId());
+                preparedStatement2.setInt(1, developer.getId());
                 for(Skill skill : developer.getSkills()) {
-                    preparedStatement.setInt(2, skill.getId());
-                    preparedStatement.executeUpdate();
+                    preparedStatement2.setInt(2, skill.getId());
+                    preparedStatement2.executeUpdate();
                 }
 
             }
@@ -135,45 +135,44 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
 
     @Override
     public Developer update(Developer developer) {
-        PreparedStatement preparedStatement;
         String sql = "UPDATE developers SET firstname = ?, lastname = ?, status = ?, id_specialty = ? WHERE id = ?;";
+        String sqlCS = "SELECT id_skill from developer_skills WHERE id_developer = ?;";
+        String sqlDelete = "DELETE FROM developer_skills WHERE id_developer = ? AND id_skill = ?;";
+        String sqlInsert = "INSERT INTO developer_skills(id_developer, id_skill) VALUES(?, ?);";
 
-        try {
-            preparedStatement = JdbcUtils.getPreparedStatement(sql);
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);
+             PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sqlCS);
+             PreparedStatement preparedStatement2 = JdbcUtils.getPreparedStatement(sqlDelete);
+             PreparedStatement preparedStatement4 = JdbcUtils.getPreparedStatement(sqlInsert);) {
+
             preparedStatement.setString(1, developer.getFirstName());
             preparedStatement.setString(2, developer.getLastName());
             preparedStatement.setString(3,developer.getStatus().toString());
             preparedStatement.setInt(4,developer.getSpecialty().getId());
             preparedStatement.setInt(5,developer.getId());
             if(preparedStatement.executeUpdate()==1) {
-                sql = "SELECT id_skill from developer_skills WHERE id_developer = ?;";
-                preparedStatement = JdbcUtils.getPreparedStatement(sql);
-                preparedStatement.setInt(1,developer.getId());
-                ResultSet resultSet = preparedStatement.executeQuery();
+
+
+                preparedStatement1.setInt(1,developer.getId());
+                ResultSet resultSet = preparedStatement1.executeQuery();
                 List<Skill> currentSkills = new ArrayList<>();
                 List<Skill> newSkills = developer.getSkills();
                 while (resultSet.next()) {
                     currentSkills.add(new DbSkillRepositoryImpl().getById(resultSet.getInt("id_skill")));
                 }
-
-                String sqlDelete = "DELETE FROM developer_skills WHERE id_developer = ? AND id_skill = ?;";
                 for(Skill skill : currentSkills) {
                     if(!newSkills.contains(skill)) {
-                        preparedStatement = JdbcUtils.getPreparedStatement(sqlDelete);
-                        preparedStatement.setInt(1, developer.getId());
-                        preparedStatement.setInt(2,skill.getId());
-                        preparedStatement.executeUpdate();
+                        preparedStatement2.setInt(1, developer.getId());
+                        preparedStatement2.setInt(2,skill.getId());
+                        preparedStatement2.executeUpdate();
                     } else {
                         newSkills.remove(skill);
                     }
                 }
-
-                String sqlInsert = "INSERT INTO developer_skills(id_developer, id_skill) VALUES(?, ?);";
-                preparedStatement = JdbcUtils.getPreparedStatement(sqlInsert);
-                preparedStatement.setInt(1, developer.getId());
+                preparedStatement4.setInt(1, developer.getId());
                 for(Skill skill : newSkills) {
-                    preparedStatement.setInt(2, skill.getId());
-                    preparedStatement.executeUpdate();
+                    preparedStatement4.setInt(2, skill.getId());
+                    preparedStatement4.executeUpdate();
                 }
             }
         } catch (SQLException e) {
@@ -184,16 +183,16 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
 
     @Override
     public void deleteById(Integer id) {
-        PreparedStatement preparedStatement;
         String sql_dev = "DELETE FROM developers WHERE id = ?";
         String sql_skills = "DELETE FROM developer_skills WHERE id_developer = ?;";
-        try {
-            preparedStatement = JdbcUtils.getPreparedStatement(sql_dev);
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql_dev);
+             PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sql_skills);) {
+
             preparedStatement.setInt(1, id);
             if(preparedStatement.executeUpdate()==1) {
-                    preparedStatement = JdbcUtils.getPreparedStatement(sql_skills);
-                    preparedStatement.setInt(1,id);
-                    preparedStatement.executeUpdate();
+                    preparedStatement1.setInt(1,id);
+                    preparedStatement1.executeUpdate();
             }
             else throw new RuntimeException("Error when deleting.");
         } catch (SQLException e) {
