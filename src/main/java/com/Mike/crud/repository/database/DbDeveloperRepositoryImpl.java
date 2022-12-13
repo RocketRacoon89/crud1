@@ -59,7 +59,10 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
                     developers.add(developer);
                 } else {
                     skills = developers.get(developers.indexOf(developer)).getSkills();
-                    skills.add(new DbSkillRepositoryImpl().getById(resultSet.getInt("ds.id_skill")));
+                    skill.setId(resultSet.getInt("s.id"));
+                    skill.setSkill(resultSet.getString("s.skill"));
+                    skill.setStatus(Status.valueOf(resultSet.getString("s.status")));
+                    skills.add(skill);
                     developers.get(developers.indexOf(developer)).setSkills(skills);
                 }
             }
