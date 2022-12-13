@@ -32,24 +32,36 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         List<Developer> developers = new ArrayList<>();
         int i = 0;
         //TODO: use 1 request with JOIN
-        String sql = "SELECT * FROM developers;";
-        String sqlDs = "SELECT * FROM developer_skills WHERE id_developer = ?;";
+        String sql = "SELECT d.id, d.FirstName, d.LastName, d.Status, d.id_specialty, ds.id_developer, ds.id_skill, s.id, s.skill, s.status  FROM developers d" +
+                " JOIN developer_skills ds ON ds.id_developer=d.id"+
+                " JOIN skills s ON s.id=ds.id_skill;";
 
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
-            PreparedStatement preparedStatementEn = JdbcUtils.getPreparedStatement(sqlDs);) {
-
+             ResultSet resultSet = preparedStatement.executeQuery(sql);) {
             while (resultSet.next()) {
-                Developer developer = mapResultSetToDeveloper(resultSet);
-                preparedStatementEn.setInt(1, developer.getId());
-                ResultSet resultSet1 = preparedStatementEn.executeQuery();
+
+                Developer developer = new Developer();
+                Skill skill = new Skill();
                 List<Skill> skills = new ArrayList<>();
-                while(resultSet1.next()) {
-                    Skill skill = new DbSkillRepositoryImpl().getById(resultSet1.getInt("id_skill"));
+
+                developer.setId(resultSet.getInt("d.id"));
+                developer.setFirstName(resultSet.getString("d.firstname"));
+                developer.setLastName(resultSet.getString("d.lastname"));
+                developer.setStatus(Status.valueOf(resultSet.getString("d.status")));
+                developer.setSpecialty(new DbSpecialtyRepositoryImpl().getById(resultSet.getInt("d.id_specialty")));
+
+                if(!developers.contains(developer)) {
+                    skill.setId(resultSet.getInt("s.id"));
+                    skill.setSkill(resultSet.getString("s.skill"));
+                    skill.setStatus(Status.valueOf(resultSet.getString("s.status")));
                     skills.add(skill);
+                    developer.setSkills(skills);
+                    developers.add(developer);
+                } else {
+                    skills = developers.get(developers.indexOf(developer)).getSkills();
+                    skills.add(new DbSkillRepositoryImpl().getById(resultSet.getInt("ds.id_skill")));
+                    developers.get(developers.indexOf(developer)).setSkills(skills);
                 }
-                developer.setSkills(skills);
-                developers.add(developer);
             }
         } catch (SQLException e) {
             e.printStackTrace();

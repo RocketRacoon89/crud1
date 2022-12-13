@@ -1,6 +1,7 @@
 package com.Mike.crud.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Developer {
 
@@ -65,5 +66,18 @@ public class Developer {
 
     public String toString() {
         return "ID: "+id+", "+lastName+" "+firstName+", spec: "+specialty+", skills: "+skills+". STATUS: "+status+".";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Developer developer = (Developer) o;
+        return Objects.equals(id, developer.id) && Objects.equals(firstName, developer.firstName) && Objects.equals(lastName, developer.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName);
     }
 }
