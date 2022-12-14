@@ -1,4 +1,4 @@
-package com.Mike.crud.model;
+package com.mike.crud.model;
 
 import java.util.List;
 import java.util.Objects;

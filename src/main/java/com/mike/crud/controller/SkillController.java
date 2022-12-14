@@ -1,10 +1,9 @@
-package com.Mike.crud.controller;
+package com.mike.crud.controller;
 
-import com.Mike.crud.model.Skill;
-import com.Mike.crud.model.Status;
-import com.Mike.crud.repository.SkillRepository;
-import com.Mike.crud.repository.database.DbSkillRepositoryImpl;
-import com.Mike.crud.repository.gson.GsonSkillRepositoryImpl;
+import com.mike.crud.model.Skill;
+import com.mike.crud.model.Status;
+import com.mike.crud.repository.SkillRepository;
+import com.mike.crud.repository.database.DbSkillRepositoryImpl;
 
 import java.util.List;
 

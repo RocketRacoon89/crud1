@@ -1,10 +1,9 @@
-package com.Mike.crud.controller;
+package com.mike.crud.controller;
 
-import com.Mike.crud.model.Specialty;
-import com.Mike.crud.model.Status;
-import com.Mike.crud.repository.SpecialtyRepository;
-import com.Mike.crud.repository.database.DbSpecialtyRepositoryImpl;
-import com.Mike.crud.repository.gson.GsonSpecialtyRepositoryImpl;
+import com.mike.crud.model.Specialty;
+import com.mike.crud.model.Status;
+import com.mike.crud.repository.SpecialtyRepository;
+import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 
 import java.util.List;
 

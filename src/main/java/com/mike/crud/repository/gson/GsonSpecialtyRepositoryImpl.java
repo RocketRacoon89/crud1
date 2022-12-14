@@ -1,7 +1,7 @@
-package com.Mike.crud.repository.gson;
+package com.mike.crud.repository.gson;
 
-import com.Mike.crud.model.Specialty;
-import com.Mike.crud.repository.SpecialtyRepository;
+import com.mike.crud.model.Specialty;
+import com.mike.crud.repository.SpecialtyRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

@@ -1,9 +1,9 @@
-package com.Mike.crud.repository.database;
+package com.mike.crud.repository.database;
 
-import com.Mike.crud.model.Specialty;
-import com.Mike.crud.model.Status;
-import com.Mike.crud.repository.SpecialtyRepository;
-import com.Mike.crud.utils.JdbcUtils;
+import com.mike.crud.model.Specialty;
+import com.mike.crud.model.Status;
+import com.mike.crud.repository.SpecialtyRepository;
+import com.mike.crud.utils.JdbcUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

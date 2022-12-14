@@ -1,6 +1,6 @@
-package com.Mike.crud.repository;
+package com.mike.crud.repository;
 
-import com.Mike.crud.model.Skill;
+import com.mike.crud.model.Skill;
 
 public interface SkillRepository extends GenericRepository<Skill, Integer> {
 

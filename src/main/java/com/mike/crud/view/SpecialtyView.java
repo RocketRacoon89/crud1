@@ -1,7 +1,7 @@
-package com.Mike.crud.view;
+package com.mike.crud.view;
 
-import com.Mike.crud.controller.SpecialtyController;
-import com.Mike.crud.model.Specialty;
+import com.mike.crud.controller.SpecialtyController;
+import com.mike.crud.model.Specialty;
 
 import java.util.Scanner;
 

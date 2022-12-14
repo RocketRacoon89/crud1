@@ -1,4 +1,4 @@
-package com.Mike.crud.repository;
+package com.mike.crud.repository;
 
 import java.util.List;
 

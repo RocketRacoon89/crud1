@@ -1,16 +1,16 @@
-package com.Mike.crud.repository.database;
+package com.mike.crud.repository.database;
 
-import com.Mike.crud.model.Skill;
-import com.Mike.crud.model.Status;
-import com.Mike.crud.repository.SkillRepository;
-import com.Mike.crud.utils.JdbcUtils;
+import com.mike.crud.model.Skill;
+import com.mike.crud.model.Status;
+import com.mike.crud.repository.SkillRepository;
+import com.mike.crud.utils.JdbcUtils;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DbSkillRepositoryImpl implements SkillRepository {
 
-        @Override
+    @Override
     public Skill getById(Integer id) {
             String sql = "SELECT * FROM skills WHERE id = ?";
             Skill skill = new Skill();

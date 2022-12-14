@@ -1,4 +1,4 @@
-package com.Mike.crud.utils;
+package com.mike.crud.utils;
 
 import java.sql.*;
 

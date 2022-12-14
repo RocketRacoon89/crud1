@@ -1,7 +1,7 @@
-package com.Mike.crud.view;
+package com.mike.crud.view;
 
-import com.Mike.crud.controller.SkillController;
-import com.Mike.crud.model.Skill;
+import com.mike.crud.controller.SkillController;
+import com.mike.crud.model.Skill;
 
 import java.util.Scanner;
 

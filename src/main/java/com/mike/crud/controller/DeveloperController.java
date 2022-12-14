@@ -1,18 +1,15 @@
-package com.Mike.crud.controller;
+package com.mike.crud.controller;
 
-import com.Mike.crud.model.Developer;
-import com.Mike.crud.model.Skill;
-import com.Mike.crud.model.Specialty;
-import com.Mike.crud.model.Status;
-import com.Mike.crud.repository.DeveloperRepository;
-import com.Mike.crud.repository.SkillRepository;
-import com.Mike.crud.repository.SpecialtyRepository;
-import com.Mike.crud.repository.database.DbDeveloperRepositoryImpl;
-import com.Mike.crud.repository.database.DbSkillRepositoryImpl;
-import com.Mike.crud.repository.database.DbSpecialtyRepositoryImpl;
-import com.Mike.crud.repository.gson.GsonDeveloperRepositoryImpl;
-import com.Mike.crud.repository.gson.GsonSkillRepositoryImpl;
-import com.Mike.crud.repository.gson.GsonSpecialtyRepositoryImpl;
+import com.mike.crud.model.Developer;
+import com.mike.crud.model.Skill;
+import com.mike.crud.model.Specialty;
+import com.mike.crud.model.Status;
+import com.mike.crud.repository.DeveloperRepository;
+import com.mike.crud.repository.SkillRepository;
+import com.mike.crud.repository.SpecialtyRepository;
+import com.mike.crud.repository.database.DbDeveloperRepositoryImpl;
+import com.mike.crud.repository.database.DbSkillRepositoryImpl;
+import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;

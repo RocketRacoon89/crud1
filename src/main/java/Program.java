@@ -1,9 +1,7 @@
-import com.Mike.crud.view.DeveloperView;
-import com.Mike.crud.view.SkillView;
-import com.Mike.crud.view.SpecialtyView;
+import com.mike.crud.view.DeveloperView;
+import com.mike.crud.view.SkillView;
+import com.mike.crud.view.SpecialtyView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Program {

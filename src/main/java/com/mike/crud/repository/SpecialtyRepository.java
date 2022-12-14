@@ -1,6 +1,6 @@
-package com.Mike.crud.repository;
+package com.mike.crud.repository;
 
-import com.Mike.crud.model.Specialty;
+import com.mike.crud.model.Specialty;
 
 public interface SpecialtyRepository extends GenericRepository <Specialty, Integer> {
 

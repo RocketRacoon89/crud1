@@ -1,7 +1,7 @@
-package com.Mike.crud.view;
+package com.mike.crud.view;
 
-import com.Mike.crud.controller.DeveloperController;
-import com.Mike.crud.model.Developer;
+import com.mike.crud.controller.DeveloperController;
+import com.mike.crud.model.Developer;
 
 import java.util.ArrayList;
 import java.util.List;

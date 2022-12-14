@@ -1,4 +1,4 @@
-package com.Mike.crud.model;
+package com.mike.crud.model;
 
 public class Skill {
     private Integer id;

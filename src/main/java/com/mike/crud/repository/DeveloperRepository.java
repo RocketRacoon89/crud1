@@ -1,6 +1,6 @@
-package com.Mike.crud.repository;
+package com.mike.crud.repository;
 
-import com.Mike.crud.model.Developer;
+import com.mike.crud.model.Developer;
 
 public interface DeveloperRepository extends GenericRepository <Developer, Integer> {
 

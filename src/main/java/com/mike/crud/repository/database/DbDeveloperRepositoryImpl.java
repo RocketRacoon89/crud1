@@ -1,10 +1,10 @@
-package com.Mike.crud.repository.database;
+package com.mike.crud.repository.database;
 
-import com.Mike.crud.model.Developer;
-import com.Mike.crud.model.Skill;
-import com.Mike.crud.model.Status;
-import com.Mike.crud.repository.DeveloperRepository;
-import com.Mike.crud.utils.JdbcUtils;
+import com.mike.crud.model.Developer;
+import com.mike.crud.model.Skill;
+import com.mike.crud.model.Status;
+import com.mike.crud.repository.DeveloperRepository;
+import com.mike.crud.utils.JdbcUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +31,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
     public List<Developer> getAll() {
         List<Developer> developers = new ArrayList<>();
         int i = 0;
-        //TODO: use 1 request with JOIN
+
         String sql = "SELECT d.id, d.FirstName, d.LastName, d.Status, d.id_specialty, ds.id_developer, ds.id_skill, s.id, s.skill, s.status  FROM developers d" +
                 " JOIN developer_skills ds ON ds.id_developer=d.id"+
                 " JOIN skills s ON s.id=ds.id_skill;";
@@ -86,14 +86,14 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                //TODO: get developer
+
                 developer.setId(resultSet.getInt("id"));
                 developer.setFirstName(resultSet.getNString("FirstName"));
                 developer.setLastName(resultSet.getNString("LastName"));
                 developer.setSpecialty(new DbSpecialtyRepositoryImpl().getById(resultSet.getInt("id_specialty")));
                 developer.setStatus(Status.valueOf(resultSet.getNString("status")));
 
-                //TODO: get skill for developer
+
                 preparedStatement1.setInt(1,developer.getId());
                 ResultSet resultSet1 = preparedStatement1.executeQuery();
                 while (resultSet1.next()) {
@@ -123,8 +123,6 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
             preparedStatement.setString(3, developer.getStatus().toString());
             preparedStatement.setInt(4, developer.getSpecialty().getId());
             if(preparedStatement.executeUpdate()==1) {
-
-                //TODO: get developer_id for new developer
 
                 preparedStatement1.setString(1, developer.getFirstName());
                 preparedStatement1.setString(2, developer.getLastName());

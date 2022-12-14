@@ -1,7 +1,7 @@
-package com.Mike.crud.repository.gson;
+package com.mike.crud.repository.gson;
 
-import com.Mike.crud.model.Developer;
-import com.Mike.crud.repository.DeveloperRepository;
+import com.mike.crud.model.Developer;
+import com.mike.crud.repository.DeveloperRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class GsonDeveloperRepositoryImpl implements DeveloperRepository {
 
