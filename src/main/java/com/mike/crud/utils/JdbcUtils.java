@@ -13,11 +13,16 @@ public class JdbcUtils {
     private JdbcUtils() {
     }
 
-    public static synchronized Connection getCon() throws SQLException {
-        if(connection==null) {
-            connection = DriverManager.getConnection(url, userName, pwd);
-            return connection;
-        }
+    public static synchronized Connection getCon() {
+            if (connection == null) {
+                try {
+                    connection = DriverManager.getConnection(url, userName, pwd);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                return connection;
+            }
         return connection;
     }
 
