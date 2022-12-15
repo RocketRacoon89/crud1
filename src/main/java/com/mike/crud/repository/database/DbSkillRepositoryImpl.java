@@ -62,12 +62,18 @@ public class DbSkillRepositoryImpl implements SkillRepository {
         @Override
     public Skill save(Skill skill)  {
             String sql = "INSERT INTO skills(skill, status) VALUES(?, ?);";
+            int idSkill = 0;
 
-            try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);) {
+            try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithGeneratedKeys(sql);) {
 
                 preparedStatement.setString(1, skill.getSkill());
                 preparedStatement.setString(2, skill.getStatus().toString());
                 preparedStatement.executeUpdate();
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                while (resultSet.next()) {
+                    idSkill = resultSet.getInt(1);
+                    skill.setId(idSkill);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

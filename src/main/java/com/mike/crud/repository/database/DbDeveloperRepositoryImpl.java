@@ -2,6 +2,7 @@ package com.mike.crud.repository.database;
 
 import com.mike.crud.model.Developer;
 import com.mike.crud.model.Skill;
+import com.mike.crud.model.Specialty;
 import com.mike.crud.model.Status;
 import com.mike.crud.repository.DeveloperRepository;
 import com.mike.crud.utils.JdbcUtils;
@@ -76,61 +77,69 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
     @Override
     public Developer getById(Integer id) {
         Developer developer = new Developer();
+        Skill skill = new Skill();
         List<Skill> devSkills = new ArrayList<>();
-        String sqlDev = "SELECT * FROM developers WHERE id = ?;";
-        String sqlSkills = "SELECT id_skill FROM developer_skills WHERE id_developer = ?;";
+        Specialty specialty = new Specialty();
+        String sql = "SELECT * FROM developers d" +
+                " JOIN developer_skills ds ON ds.id_developer=d.id" +
+                " JOIN specialties s ON s.id=d.id_specialty" +
+                " JOIN skills sk ON sk.id=ds.id_skill" +
+                " WHERE d.id = ?;";
 
-        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sqlDev);
-             PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sqlSkills);) {
+        try (PreparedStatement preparedStatement2 = JdbcUtils.getPreparedStatement(sql)) {
 
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-
-                developer.setId(resultSet.getInt("id"));
-                developer.setFirstName(resultSet.getNString("FirstName"));
-                developer.setLastName(resultSet.getNString("LastName"));
-                developer.setSpecialty(new DbSpecialtyRepositoryImpl().getById(resultSet.getInt("id_specialty")));
-                developer.setStatus(Status.valueOf(resultSet.getNString("status")));
-
-
-                preparedStatement1.setInt(1,developer.getId());
-                ResultSet resultSet1 = preparedStatement1.executeQuery();
-                while (resultSet1.next()) {
-                    devSkills.add(new DbSkillRepositoryImpl().getById(resultSet1.getInt("id_skill")));
+            preparedStatement2.setInt(1, id);
+            ResultSet resultSet2 = preparedStatement2.executeQuery();
+            while (resultSet2.next()) {
+                if(developer.getId()==null) {
+                    developer.setId(resultSet2.getInt("id"));
+                    developer.setFirstName(resultSet2.getNString("FirstName"));
+                    developer.setLastName(resultSet2.getNString("LastName"));
+                    specialty.setId(resultSet2.getInt("s.id"));
+                    specialty.setSpecialty(resultSet2.getString("s.specialty"));
+                    specialty.setStatus(Status.valueOf(resultSet2.getString("s.status")));
+                    developer.setSpecialty(specialty);
+                    skill.setId(resultSet2.getInt("sk.id"));
+                    skill.setSkill(resultSet2.getString("sk.skill"));
+                    skill.setStatus(Status.valueOf(resultSet2.getString("sk.status")));
+                    devSkills.add(skill);
+                    developer.setSkills(devSkills);
+                } else {
+                    skill.setId(resultSet2.getInt("sk.id"));
+                    skill.setSkill(resultSet2.getString("sk.skill"));
+                    skill.setStatus(Status.valueOf(resultSet2.getString("sk.status")));
+                    devSkills.add(skill);
+                    developer.setSkills(devSkills);
                 }
-                developer.setSkills(devSkills);
+
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return developer;
     }
 
-
+    //TODO: use DB internal auto increment mechanism in the DB and get created ID from DB using RETURN_GENERATED_KEYS
+    //TODO: insert data to related tables inside this method - private method is allowed
     @Override
     public Developer save(Developer developer) {
         String sql_dev = "INSERT INTO developers(firstname, lastname, status, id_specialty) VALUES(?, ?, ?, ?);";
         String sql_spec = "INSERT INTO developer_skills(id_developer, id_skill) VALUES(?, ?);";
-        String sql_getId = "SELECT id FROM developers WHERE firstname = ? and lastname = ? and id_specialty = ?;";
+        int idDev = 0;
 
-        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql_dev);
-             PreparedStatement preparedStatement1 = JdbcUtils.getPreparedStatement(sql_getId);
-             PreparedStatement preparedStatement2 = JdbcUtils.getPreparedStatement(sql_spec);) {
+        try (PreparedStatement preparedStatement2 = JdbcUtils.getPreparedStatement(sql_spec);
+             PreparedStatement preparedStatement3 = JdbcUtils.getPreparedStatementWithGeneratedKeys(sql_dev)) {
 
-            preparedStatement.setString(1, developer.getFirstName());
-            preparedStatement.setString(2, developer.getLastName());
-            preparedStatement.setString(3, developer.getStatus().toString());
-            preparedStatement.setInt(4, developer.getSpecialty().getId());
-            if(preparedStatement.executeUpdate()==1) {
-
-                preparedStatement1.setString(1, developer.getFirstName());
-                preparedStatement1.setString(2, developer.getLastName());
-                preparedStatement1.setInt(3, developer.getSpecialty().getId());
-                ResultSet resultSet = preparedStatement1.executeQuery();
+            preparedStatement3.setString(1, developer.getFirstName());
+            preparedStatement3.setString(2, developer.getLastName());
+            preparedStatement3.setString(3, developer.getStatus().toString());
+            preparedStatement3.setInt(4, developer.getSpecialty().getId());
+            if(preparedStatement3.executeUpdate()==1) {
+                ResultSet resultSet = preparedStatement3.getGeneratedKeys();
                 while (resultSet.next()) {
-                    developer.setId(resultSet.getInt("id"));
-                    System.out.println("save return id "+ developer.getId());
+                    idDev = resultSet.getInt(1);
+                    developer.setId(idDev);
                 }
 
                 preparedStatement2.setInt(1, developer.getId());
@@ -138,7 +147,6 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
                     preparedStatement2.setInt(2, skill.getId());
                     preparedStatement2.executeUpdate();
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -146,6 +154,7 @@ public class DbDeveloperRepositoryImpl implements DeveloperRepository {
         return developer;
     }
 
+    
     @Override
     public Developer update(Developer developer) {
         String sql = "UPDATE developers SET firstname = ?, lastname = ?, status = ?, id_specialty = ? WHERE id = ?;";

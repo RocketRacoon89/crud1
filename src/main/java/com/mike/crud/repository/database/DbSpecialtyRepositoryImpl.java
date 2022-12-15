@@ -63,12 +63,17 @@ public class DbSpecialtyRepositoryImpl implements SpecialtyRepository {
     @Override
     public Specialty save(Specialty specialty) {
         String sql = "INSERT INTO specialties(specialty, status) VALUES(?, ?);";
-
-        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql);) {
+        int idSpec = 0;
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithGeneratedKeys(sql);) {
 
             preparedStatement.setString(1, specialty.getSpecialty());
             preparedStatement.setString(2, specialty.getStatus().toString());
             preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            while (resultSet.next()) {
+                idSpec = resultSet.getInt(1);
+                specialty.setId(idSpec);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

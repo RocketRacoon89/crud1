@@ -1,8 +1,13 @@
 import com.mike.crud.repository.database.DbSkillRepositoryImpl;
 import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
+import com.mike.crud.utils.JdbcUtils;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Test1 {
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws SQLException {
 //        throws SQLException, ClassNotFoundException
 //        DbSkillRepositoryImpl dbSkillRepository = new DbSkillRepositoryImpl();
 //        dbSkillRepository.deleteById(2);
@@ -116,14 +121,17 @@ public class Test1 {
 //        }
 //
 //        System.out.println(developers);
-
-        DbSkillRepositoryImpl dbSkillRepository = new DbSkillRepositoryImpl();
-        System.out.println(dbSkillRepository.getAll());
-        DbSpecialtyRepositoryImpl dbSpecialtyRepository = new DbSpecialtyRepositoryImpl();
-        System.out.println(dbSpecialtyRepository.getAll());
-        DbSkillRepositoryImpl dbSkillRepository1 = new DbSkillRepositoryImpl();
-        System.out.println(dbSkillRepository1.getAll());
-        System.out.println("test end");
+        int idSkill = 0;
+        String sql = "INSERT INTO skills(skill, status) VALUES(?, ?);";
+        PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithGeneratedKeys(sql);
+        preparedStatement.setString(1,"TestGenKey1");
+        preparedStatement.setString(2,"ACTIVE");
+        preparedStatement.executeUpdate();
+        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+        while (resultSet.next()) {
+            idSkill = resultSet.getInt(1);
+        }
+        System.out.println(idSkill);
 
 
     }
