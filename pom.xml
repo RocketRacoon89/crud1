@@ -12,7 +12,10 @@
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+        <mysql.connector.version>8.0.21</mysql.connector.version>
+        <liquibase.version>4.17.2</liquibase.version>
+        <junit.version>4.13.2</junit.version>
+        <mockito.version>4.8.0</mockito.version>
     </properties>
 
     <dependencies>
@@ -21,13 +24,14 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
+
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.21</version>
+            <version>${mysql.connector.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
@@ -41,7 +45,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -49,10 +53,9 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.8.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 
