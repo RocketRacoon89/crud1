@@ -4,39 +4,30 @@ import com.mike.crud.model.Specialty;
 import com.mike.crud.model.Status;
 import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 public class SpecialtyControllerTest {
 
-    DbSpecialtyRepositoryImpl dbSpecialtyRepository;
+    @Mock
+    SpecialtyController specialtyController;
 
     @Test
     public void createSpecialty() {
-        Specialty specialty = new Specialty();
-        specialty.setId(743);
-        specialty.setSpecialty("C#");
-        specialty.setStatus(Status.ACTIVE);
-        int actual = specialty.getId();
-        int expected = 743;
-        assertEquals(expected, actual);
-        assertEquals("C#", specialty.getSpecialty());
-        assertEquals(Status.ACTIVE, specialty.getStatus());
+        Specialty testSpec = new Specialty();
+        testSpec.setSpecialty("Ivan");
+        testSpec.setStatus(Status.ACTIVE);
+        specialtyController = Mockito.mock(SpecialtyController.class);
+        when(specialtyController.createSpecialty("Ivan", "ACTIVE")).thenReturn(testSpec);
     }
 
     @Test
     public void updateSpecialty() {
-        Specialty specialty = new Specialty();
-        specialty.setId(1);
-        specialty.setSpecialty("C#");
-        specialty.setStatus(Status.ACTIVE);
-        int actual = specialty.getId();
-        int expected = 1;
-        assertEquals(expected, actual);
-        assertEquals("C#", specialty.getSpecialty());
-        assertEquals(Status.ACTIVE, specialty.getStatus());
+
     }
 
     @Test
@@ -49,12 +40,5 @@ public class SpecialtyControllerTest {
 
     @Test
     public void getSpecialty() {
-        int id = 2;
-        Specialty specialty = new Specialty();
-        specialty.setId(id);
-        specialty.setSpecialty("C#");
-        specialty.setStatus(Status.ACTIVE);
-        Specialty specialtyExp = (Specialty) Mockito.when(dbSpecialtyRepository.getById(2)).thenReturn(specialty);
-        assertNotNull(specialtyExp);
     }
 }
