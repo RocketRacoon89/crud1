@@ -1,3 +1,5 @@
+import com.mike.crud.model.Specialty;
+import com.mike.crud.model.Status;
 import com.mike.crud.repository.database.DbSkillRepositoryImpl;
 import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import com.mike.crud.utils.JdbcUtils;
@@ -5,6 +7,8 @@ import com.mike.crud.utils.JdbcUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Test1 {
     public static void main(String[] args) throws SQLException {
@@ -121,17 +125,31 @@ public class Test1 {
 //        }
 //
 //        System.out.println(developers);
-        int idSkill = 0;
-        String sql = "INSERT INTO skills(skill, status) VALUES(?, ?);";
-        PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithGeneratedKeys(sql);
-        preparedStatement.setString(1,"TestGenKey1");
-        preparedStatement.setString(2,"ACTIVE");
-        preparedStatement.executeUpdate();
-        ResultSet resultSet = preparedStatement.getGeneratedKeys();
-        while (resultSet.next()) {
-            idSkill = resultSet.getInt(1);
+//        int idSkill = 0;
+//        String sql = "INSERT INTO skills(skill, status) VALUES(?, ?);";
+//        PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithGeneratedKeys(sql);
+//        preparedStatement.setString(1,"TestGenKey1");
+//        preparedStatement.setString(2,"ACTIVE");
+//        preparedStatement.executeUpdate();
+//        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+//        while (resultSet.next()) {
+//            idSkill = resultSet.getInt(1);
+//        }
+//        System.out.println(idSkill);
+
+        List<Specialty> specialties = new ArrayList<>();
+        for(int i=1; i<6; i++) {
+            Specialty specialty = new Specialty();
+            specialty.setId(i);
+            specialty.setSpecialty("Test"+i);
+            specialty.setStatus(Status.ACTIVE);
+            specialties.add(specialty);
         }
-        System.out.println(idSkill);
+        System.out.println(specialties);
+        System.out.println(specialties.get(0));
+        specialties.remove(0);
+        System.out.println(specialties.get(0));
+
 
 
     }

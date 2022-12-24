@@ -10,6 +10,7 @@ import com.mike.crud.repository.SpecialtyRepository;
 import com.mike.crud.repository.database.DbDeveloperRepositoryImpl;
 import com.mike.crud.repository.database.DbSkillRepositoryImpl;
 import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
+import com.mike.crud.services.DeveloperService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class DeveloperController {
     private final DeveloperRepository developerRepository = new DbDeveloperRepositoryImpl();
     private final SkillRepository skillRepository = new DbSkillRepositoryImpl();
     private final SpecialtyRepository specialtyRepository = new DbSpecialtyRepositoryImpl();
+    private DeveloperService developerService = new DeveloperService();
 
     public Developer createDeveloper(String firstName, String lastName, List<Integer> skillID, Integer specialty, String status) {
         Developer developer = new Developer();
@@ -31,10 +33,9 @@ public class DeveloperController {
         List<Skill> skills = new ArrayList<>();
         skillID.stream().forEach(s-> skills.add(skillRepository.getById(s)));
         developer.setSkills(skills);
-        List<Specialty> specialties = new ArrayList<>();
         developer.setSpecialty(specialtyRepository.getById(specialty));
         developer.setStatus(Status.valueOf(status));
-        return developerRepository.save(developer);
+        return developerService.createDeveloper(developer);
     }
 
     public Developer updateDeveloper(Integer id, String firstName, String lastName, List<Integer> skillID, Integer specialty, String status) {
@@ -45,22 +46,21 @@ public class DeveloperController {
         List<Skill> skills = new ArrayList<>();
         skillID.stream().forEach(s-> skills.add(skillRepository.getById(s)));
         developer.setSkills(skills);
-        List<Specialty> specialties = new ArrayList<>();
         developer.setSpecialty(specialtyRepository.getById(specialty));
         developer.setStatus(Status.valueOf(status));
-        return developerRepository.update(developer);
+        return developerService.updateDeveloper(developer);
     }
 
     public void deleteDeveloper(Integer id) {
-        developerRepository.deleteById(id);
+        developerService.deleteDeveloper(id);
     }
 
     public List<Developer> getAllDevelopers() {
-        return developerRepository.getAll();
+        return developerService.getAllDevelopers();
     }
 
     public Developer getDeveloper(Integer id) {
-        return developerRepository.getById(id);
+        return developerService.getDeveloperById(id);
     }
 
 }

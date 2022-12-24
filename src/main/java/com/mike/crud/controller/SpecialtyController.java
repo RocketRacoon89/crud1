@@ -2,8 +2,6 @@ package com.mike.crud.controller;
 
 import com.mike.crud.model.Specialty;
 import com.mike.crud.model.Status;
-import com.mike.crud.repository.SpecialtyRepository;
-import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import com.mike.crud.services.SpecialtyService;
 
 import java.util.List;
@@ -18,8 +16,7 @@ public class SpecialtyController {
         Specialty specialty = new Specialty();
         specialty.setSpecialty(name);
         specialty.setStatus(Status.valueOf(status));
-//        return specialtyRepository.save(specialty);
-        return specialtyService.createSpecialtyService(specialty);
+        return specialtyService.createSpecialty(specialty);
     }
 
     public Specialty updateSpecialty(Integer id, String name, String status) {
@@ -27,22 +24,18 @@ public class SpecialtyController {
         specialty.setId(id);
         specialty.setSpecialty(name);
         specialty.setStatus(Status.valueOf(status));
-//        return specialtyRepository.update(specialty);
-        return specialtyService.updateSpecialtyService(specialty);
+        return specialtyService.updateSpecialty(specialty);
     }
 
     public void deleteSpecialty(Integer id) {
-//        specialtyRepository.deleteById(id);
-        specialtyService.deleteSpecialtyService(id);
+        specialtyService.deleteSpecialty(id);
     }
 
     public List<Specialty> getAllSpecialty() {
-//        return specialtyRepository.getAll();
-        return specialtyService.getAllSpecialtyService();
+        return specialtyService.getAllSpecialty();
     }
 
     public Specialty getSpecialty(Integer id) {
-//        return specialtyRepository.getById(id);
-        return specialtyService.getByIdSpecialtyService(id);
+        return specialtyService.getByIdSpecialty(id);
     }
 }
