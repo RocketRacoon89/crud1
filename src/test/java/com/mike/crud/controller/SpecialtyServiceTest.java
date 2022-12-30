@@ -25,10 +25,6 @@ public class SpecialtyServiceTest {
     private SpecialtyRepository specialtyRepository = Mockito.mock(DbSpecialtyRepositoryImpl.class);
     private SpecialtyService specialtyService = new SpecialtyService(specialtyRepository);
 
-    @Spy
-    @InjectMocks
-    private SpecialtyService specialtyServiceSpy = new SpecialtyService();
-
     private Specialty getActiveSpecialty() {
         Specialty specialty = new Specialty();
         specialty.setId(1);
@@ -52,14 +48,15 @@ public class SpecialtyServiceTest {
 
     @Test
     public void failedCreateSpecialty() {
-//        Specialty specialtyToSave = new Specialty();
-//        specialtyToSave.setSpecialty("");
-//        specialtyToSave.setStatus(Status.ACTIVE);
-//        when(specialtyRepository.save(specialtyToSave)).
-//        System.out.println(specialtyToSave.getSpecialty().equals(null));
-//
-//        Specialty createdSpecialty = specialtyService.createSpecialty(specialtyToSave);
-//        assertNull(createdSpecialty.getId());
+        Specialty specialtyToSave = new Specialty();
+        specialtyToSave.setSpecialty("Java");
+        specialtyToSave.setStatus(Status.ACTIVE);
+        try {
+            when(specialtyRepository.save(specialtyToSave)).thenThrow(new SQLException());
+            specialtyService.createSpecialty(specialtyToSave);
+        } catch (Exception e) {
+            assertTrue(e instanceof Exception);
+        }
     }
 
     @Test
@@ -67,7 +64,7 @@ public class SpecialtyServiceTest {
         Specialty specialtyToUpdate = new Specialty();
         specialtyToUpdate.setSpecialty("php");
         specialtyToUpdate.setStatus(Status.ACTIVE);
-        when(specialtyRepository.save(any())).thenReturn(getActiveSpecialty());
+        when(specialtyRepository.update(any())).thenReturn(getActiveSpecialty());
 
         Specialty updateSpecialty = specialtyService.updateSpecialty(specialtyToUpdate);
         assertEquals(updateSpecialty.getStatus(),Status.ACTIVE);
@@ -75,10 +72,32 @@ public class SpecialtyServiceTest {
     }
 
     @Test
+    public void failedUpdateSpecialty() {
+        Specialty specialtyToUpdate = new Specialty();
+        specialtyToUpdate.setSpecialty("php");
+        specialtyToUpdate.setStatus(Status.ACTIVE);
+        try{
+            when(specialtyRepository.update(any())).thenThrow(new SQLException());
+            specialtyService.updateSpecialty(specialtyToUpdate);
+        } catch (Exception e) {
+            assertTrue(e instanceof Exception);
+        }
+    }
+
+    @Test
     public void deleteSpecialty() {
-        doNothing().when(specialtyRepository).deleteById(any());
-        specialtyServiceSpy.deleteSpecialty(4321);
-        Mockito.verify(specialtyServiceSpy, Mockito.times(1)).deleteSpecialty(4321);
+        specialtyService.deleteSpecialty(4321);
+        Mockito.verify(specialtyRepository, Mockito.times(1)).deleteById(any());
+    }
+
+    @Test
+    public void failedDeleteSpecialty() {
+        try{
+            when(specialtyRepository.getById(any())).thenThrow(new SQLException());
+            specialtyService.deleteSpecialty(any());
+        } catch (Exception e) {
+            assertTrue(e instanceof Exception);
+        }
     }
 
     @Test
@@ -91,9 +110,29 @@ public class SpecialtyServiceTest {
     }
 
     @Test
+    public void failedGetAllSpecialty() {
+        try {
+            when(specialtyRepository.getAll()).thenThrow(new NullPointerException());
+            specialtyService.getAllSpecialty();
+        } catch (NullPointerException e) {
+            assertTrue(e instanceof NullPointerException);
+        }
+    }
+
+    @Test
     public void getSpecialty() {
         when(specialtyRepository.getById(any())).thenReturn(getActiveSpecialty());
         Specialty returnSpecialty = specialtyService.getByIdSpecialty(isA(Integer.class));
         assertNotNull(returnSpecialty.getId());
+    }
+
+    @Test
+    public void failedGetSpecialty() {
+        try{
+            when(specialtyRepository.getById(any())).thenThrow(new NullPointerException());
+            specialtyService.getByIdSpecialty(any());
+        } catch (NullPointerException e) {
+            assertTrue(e instanceof NullPointerException);
+        }
     }
 }

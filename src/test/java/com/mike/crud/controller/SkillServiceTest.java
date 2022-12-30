@@ -15,8 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class SkillServiceTest {
 
@@ -59,8 +58,8 @@ public class SkillServiceTest {
 
     @Test
     public void deleteSkill() {
-        doNothing().when(skillRepository).deleteById(any());
         skillService.deleteSpecialty(isA(Integer.class));
+        Mockito.verify(skillRepository, Mockito.times(1)).deleteById(isA(Integer.class));
     }
 
     @Test

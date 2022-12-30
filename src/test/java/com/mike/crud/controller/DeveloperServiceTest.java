@@ -68,8 +68,8 @@ public class DeveloperServiceTest {
 
     @Test
     public void deleteDeveloper() {
-        doNothing().when(developerRepository).deleteById(any());
         developerService.deleteDeveloper(isA(Integer.class));
+        Mockito.verify(developerRepository, Mockito.times(1)).deleteById(isA(Integer.class));
     }
 
     @Test

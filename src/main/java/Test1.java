@@ -149,6 +149,7 @@ public class Test1 {
         System.out.println(specialties.get(0));
         specialties.remove(0);
         System.out.println(specialties.get(0));
+        System.out.println(specialties instanceof Exception);
 
 
 
