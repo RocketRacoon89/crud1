@@ -6,14 +6,17 @@ import com.mike.crud.repository.SpecialtyRepository;
 import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import com.mike.crud.services.SpecialtyService;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.stubbing.Answer;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -21,6 +24,10 @@ public class SpecialtyServiceTest {
 
     private SpecialtyRepository specialtyRepository = Mockito.mock(DbSpecialtyRepositoryImpl.class);
     private SpecialtyService specialtyService = new SpecialtyService(specialtyRepository);
+
+    @Spy
+    @InjectMocks
+    private SpecialtyService specialtyServiceSpy = new SpecialtyService();
 
     private Specialty getActiveSpecialty() {
         Specialty specialty = new Specialty();
@@ -44,6 +51,18 @@ public class SpecialtyServiceTest {
     }
 
     @Test
+    public void failedCreateSpecialty() {
+//        Specialty specialtyToSave = new Specialty();
+//        specialtyToSave.setSpecialty("");
+//        specialtyToSave.setStatus(Status.ACTIVE);
+//        when(specialtyRepository.save(specialtyToSave)).
+//        System.out.println(specialtyToSave.getSpecialty().equals(null));
+//
+//        Specialty createdSpecialty = specialtyService.createSpecialty(specialtyToSave);
+//        assertNull(createdSpecialty.getId());
+    }
+
+    @Test
     public void updateSpecialty() {
         Specialty specialtyToUpdate = new Specialty();
         specialtyToUpdate.setSpecialty("php");
@@ -58,7 +77,8 @@ public class SpecialtyServiceTest {
     @Test
     public void deleteSpecialty() {
         doNothing().when(specialtyRepository).deleteById(any());
-        specialtyService.deleteSpecialty(isA(Integer.class));
+        specialtyServiceSpy.deleteSpecialty(4321);
+        Mockito.verify(specialtyServiceSpy, Mockito.times(1)).deleteSpecialty(4321);
     }
 
     @Test
