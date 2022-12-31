@@ -112,10 +112,10 @@ public class SpecialtyServiceTest {
     @Test
     public void failedGetAllSpecialty() {
         try {
-            when(specialtyRepository.getAll()).thenThrow(new NullPointerException());
+            when(specialtyRepository.getAll()).thenThrow(new SQLException());
             specialtyService.getAllSpecialty();
         } catch (NullPointerException e) {
-            assertTrue(e instanceof NullPointerException);
+            assertTrue(e instanceof Exception);
         }
     }
 
