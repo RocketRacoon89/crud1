@@ -2,8 +2,6 @@ package com.mike.crud.controller;
 
 import com.mike.crud.model.Skill;
 import com.mike.crud.model.Status;
-import com.mike.crud.repository.SkillRepository;
-import com.mike.crud.repository.database.DbSkillRepositoryImpl;
 import com.mike.crud.services.SkillService;
 
 import java.util.List;
@@ -17,7 +15,7 @@ private SkillService skillService = new SkillService();
         Skill skill = new Skill();
         skill.setSkill(name);
         skill.setStatus(Status.valueOf(status));
-        return skillService.createSpecialty(skill);
+        return skillService.createSkill(skill);
     }
 
     public Skill updateSkill(Integer id, String name, String status) {
@@ -25,11 +23,11 @@ private SkillService skillService = new SkillService();
         skill.setId(id);
         skill.setSkill(name);
         skill.setStatus(Status.valueOf(status));
-        return skillService.updateSpecialty(skill);
+        return skillService.updateSkill(skill);
     }
 
     public void deleteSkill(Integer id) {
-        skillService.deleteSpecialty(id);
+        skillService.deleteSkill(id);
     }
 
     public List<Skill> getAllSkills() {
@@ -37,7 +35,7 @@ private SkillService skillService = new SkillService();
     }
 
     public Skill getSkill(Integer id) {
-        return skillService.getByIdSpecialty(id);
+        return skillService.getByIdSkill(id);
     }
 
 }

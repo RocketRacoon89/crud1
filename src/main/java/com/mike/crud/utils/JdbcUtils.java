@@ -4,7 +4,6 @@ import java.sql.*;
 
 public class JdbcUtils {
     private static Connection connection = null;
-    private static JdbcUtils dBconnect;
 
     private static String url = "jdbc:mysql://localhost:3306/test_schema";
     private static String userName = "Mike";

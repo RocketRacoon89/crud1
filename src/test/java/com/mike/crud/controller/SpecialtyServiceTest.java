@@ -6,11 +6,7 @@ import com.mike.crud.repository.SpecialtyRepository;
 import com.mike.crud.repository.database.DbSpecialtyRepositoryImpl;
 import com.mike.crud.services.SpecialtyService;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.stubbing.Answer;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -52,10 +48,10 @@ public class SpecialtyServiceTest {
         specialtyToSave.setSpecialty("Java");
         specialtyToSave.setStatus(Status.ACTIVE);
         try {
-            when(specialtyRepository.save(specialtyToSave)).thenThrow(new SQLException());
+            when(specialtyRepository.save(specialtyToSave)).thenThrow(new SQLException("SQL Exception"));
             specialtyService.createSpecialty(specialtyToSave);
         } catch (Exception e) {
-            assertTrue(e instanceof Exception);
+            assertTrue(e.getMessage().contains("SQL Exception"));
         }
     }
 
@@ -77,10 +73,10 @@ public class SpecialtyServiceTest {
         specialtyToUpdate.setSpecialty("php");
         specialtyToUpdate.setStatus(Status.ACTIVE);
         try{
-            when(specialtyRepository.update(any())).thenThrow(new SQLException());
+            when(specialtyRepository.update(any())).thenThrow(new SQLException("SQL Exception"));
             specialtyService.updateSpecialty(specialtyToUpdate);
         } catch (Exception e) {
-            assertTrue(e instanceof Exception);
+            assertTrue(e.getMessage().contains("SQL Exception"));
         }
     }
 
@@ -93,10 +89,10 @@ public class SpecialtyServiceTest {
     @Test
     public void failedDeleteSpecialty() {
         try{
-            when(specialtyRepository.getById(any())).thenThrow(new SQLException());
+            Mockito.doThrow(new NullPointerException()).when(specialtyRepository).deleteById(isA(Integer.class));
             specialtyService.deleteSpecialty(any());
         } catch (Exception e) {
-            assertTrue(e instanceof Exception);
+            assertTrue(e instanceof NullPointerException);
         }
     }
 
@@ -112,10 +108,10 @@ public class SpecialtyServiceTest {
     @Test
     public void failedGetAllSpecialty() {
         try {
-            when(specialtyRepository.getAll()).thenThrow(new SQLException());
+            when(specialtyRepository.getAll()).thenThrow(new SQLException("SQL Exception"));
             specialtyService.getAllSpecialty();
-        } catch (NullPointerException e) {
-            assertTrue(e instanceof Exception);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("SQL Exception"));
         }
     }
 
