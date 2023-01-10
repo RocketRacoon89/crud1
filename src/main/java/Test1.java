@@ -137,19 +137,21 @@ public class Test1 {
 //        }
 //        System.out.println(idSkill);
 
-        List<Specialty> specialties = new ArrayList<>();
-        for(int i=1; i<6; i++) {
-            Specialty specialty = new Specialty();
-            specialty.setId(i);
-            specialty.setSpecialty("Test"+i);
-            specialty.setStatus(Status.ACTIVE);
-            specialties.add(specialty);
-        }
-        System.out.println(specialties);
-        System.out.println(specialties.get(0));
-        specialties.remove(0);
-        System.out.println(specialties.get(0));
-        System.out.println(specialties instanceof Exception);
+//        List<Specialty> specialties = new ArrayList<>();
+//        for(int i=1; i<6; i++) {
+//            Specialty specialty = new Specialty();
+//            specialty.setId(i);
+//            specialty.setSpecialty("Test"+i);
+//            specialty.setStatus(Status.ACTIVE);
+//            specialties.add(specialty);
+//        }
+//        System.out.println(specialties);
+//        System.out.println(specialties.get(0));
+//        specialties.remove(0);
+//        System.out.println(specialties.get(0));
+//        System.out.println(specialties instanceof Exception);
+
+
 
 
 
